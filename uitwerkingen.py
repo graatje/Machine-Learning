@@ -19,8 +19,10 @@ def draw_graph(data):
     # roteren (waarom?).
     # Maak gebruik van pytplot.scatter om dit voor elkaar te krijgen.
 
-    #YOUR CODE HERE
-    pass
+    plt.scatter(data[:, 0], data[:, 1])
+    plt.xlabel('Populatie (10k personen)')
+    plt.ylabel('Winst (10k$)')
+    plt.show()
 
 
 
