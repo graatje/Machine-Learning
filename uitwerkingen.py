@@ -44,14 +44,13 @@ def compute_cost(X, y, theta):
     #    4. kwadrateer dit verschil
     #    5. tal al deze kwadraten bij elkaar op en deel dit door twee keer het aantal datapunten
 
-    m = len(y)
-    som = 0
-    for i in range(m):
-        voorspelling = theta[0] + theta[1] * X[i]
-        verschil = voorspelling - y[i]
-        kwadraat = verschil ** 2
-        som += kwadraat
-    return som / (2 * m)
+    m, n = X.shape
+    prediction = np.dot(X, theta)
+    delta = prediction - y
+    kwadraat = delta ** 2
+    som = np.sum(kwadraat)
+
+    return 1/(2*m)*som
 
 def gradient_descent(X, y, theta, alpha, num_iters):
     #OPGAVE 3a
