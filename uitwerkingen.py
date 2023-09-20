@@ -124,9 +124,8 @@ def contour_plot(X, y):
     # zetten. Deze ndarray kun je vervolgens meesturen aan de functie computeCost. Bedenk of je nog een
     # transformatie moet toepassen of niet. Let op: je moet computeCost zelf *niet* aanpassen.
 
-    fig = plt.figure()
-    ax = fig.gca(projection = '3d')
-    jet = plt.get_cmap('jet')
+    ax = plt.figure(figsize=(7, 7)).add_subplot(projection='3d')
+    plt.get_cmap('jet')
 
     t1 = np.linspace(-10, 10, 100)
     t2 = np.linspace(-1, 4, 100)
@@ -134,14 +133,20 @@ def contour_plot(X, y):
 
     J_vals = np.zeros( (len(t2), len(t2)) )
 
-    #YOUR CODE HERE 
+    #YOUR CODE HERE
+    for i in range(len(t1)):
+        for j in range(len(t2)):
+            t = np.array([t1[i], t2[j]])
+            # divide by 100 for some reason
+            J_vals[i, j] = compute_cost(X, y, t) / 100
 
-    surf = ax.plot_surface(T1, T2, J_vals, rstride=1, cstride=1, cmap=cm.coolwarm, linewidth=0, antialiased=False)
+    ax.plot_surface(T1, T2, J_vals, rstride=1, cstride=1, cmap=cm.coolwarm, linewidth=0, antialiased=False)
 
-    xLabel = ax.set_xlabel(r'$\theta_0$', linespacing=3.2)
-    yLabel = ax.set_ylabel(r'$\theta_1$', linespacing=3.1)
-    zLabel = ax.set_zlabel(r'$J(\theta_0, \theta_1)$', linespacing=3.4)
+    ax.set_xlabel(r'$\theta_0$', linespacing=3.2)
 
-    ax.dist = 10
+    # change the ticks of the x-axis
+    ax.set_xticks(np.arange(-10, 12.5, 2.5))
+    ax.set_ylabel(r'$\theta_1$', linespacing=3.1)
+    ax.set_zlabel(r'$J(\theta_0, \theta_1)$', linespacing=3.4)
 
     plt.show()
