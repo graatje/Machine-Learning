@@ -18,13 +18,14 @@ def draw_graph(data):
     # Om deze constructie in dit specifieke geval te kunnen gebruiken, moet de data-matrix wel eerst
     # roteren (waarom?).
     # Maak gebruik van pytplot.scatter om dit voor elkaar te krijgen.
-
+    # Je kan de data roteren, want dan krijg je beide kolommen in een aparte array binnen de array. Zoals dit:
+    # data = data.T
+    # plt.scatter(data[0], data[1])
+    # In plaats daarvan hebben we ervoor gekozen om de 1e en de 2e kolom van elk datapunt in de 2-dimensionale array op te halen.
     plt.scatter(data[:, 0], data[:, 1])
     plt.xlabel('Populatie (10k personen)')
     plt.ylabel('Winst (10k$)')
     plt.show()
-
-
 
 def compute_cost(X, y, theta):
     #OPGAVE 2
@@ -40,19 +41,21 @@ def compute_cost(X, y, theta):
 
     # Een stappenplan zou het volgende kunnen zijn:
 
-    #    1. bepaal het aantal datapunten
-    #    2. bepaal de voorspelling (dus elk punt van X maal de huidige waarden van theta)
-    #    3. bereken het verschil tussen deze voorspelling en de werkelijke waarde
-    #    4. kwadrateer dit verschil
-    #    5. tal al deze kwadraten bij elkaar op en deel dit door twee keer het aantal datapunten
-
+    # 1. bepaal het aantal datapunten
     m, n = X.shape
+    # 2. bepaal de voorspelling (dus elk punt van X maal de huidige waarden van theta)
     prediction = np.dot(X, theta)
+    # 3. bereken het verschil tussen deze voorspelling en de werkelijke waarde
     delta = prediction - y
+    # 4. kwadrateer dit verschil
     kwadraat = delta ** 2
+    # 5. tal al deze kwadraten bij elkaar op en deel dit door twee keer het aantal datapunten
     som = np.sum(kwadraat)
+    # 6. deel de som door het aantal rijen keer twee
+    value = 1/(2*m)*som
 
-    return 1/(2*m)*som
+    return value
+
 
 def gradient_descent(X, y, theta, alpha, num_iters):
     #OPGAVE 3a
@@ -63,37 +66,30 @@ def gradient_descent(X, y, theta, alpha, num_iters):
     # vermenigvuldigd met het datapunt zelf (zie Blackboard voor de formule die hierbij hoort).
     # Deze som zelf wordt nog vermenigvuldigd met de 'learning rate' alpha.
 
-    # Een mogelijk stappenplan zou zijn:
-    #
-    # Voor elke iteratie van 1 tot num_iters:
-    #   1. bepaal de voorspelling voor het datapunt, gegeven de huidige waarde van theta
-    #   2. bepaal het verschil tussen deze voorspelling en de werkelijke waarde
-    #   3. vermenigvuldig dit verschil met de i-de waarde van X
-    #   4. update de i-de parameter van theta, namelijk door deze te verminderen met
-    #      alpha keer het gemiddelde van de som van de vermenigvuldiging uit 3
-
     m, n = X.shape
     costs = []
 
     for _ in range(num_iters):
-        # Calculate the predicted values
-        prediction = np.dot(X, theta.reshape(-1, 1))  # Reshape theta as a column vector
+        # 1. bepaal de voorspelling (dus elk punt van X maal de huidige waarden van theta)
+        prediction = np.dot(X, theta.reshape(-1, 1))  # hervorm theta als een kolom vector
 
-        # Calculate the error (difference between prediction and actual values)
-        error = prediction - y
+        # 2. bepaal het verschil tussen deze voorspelling en de werkelijke waarde
+        delta = prediction - y
 
         # Calculate the gradient (derivative) of the cost function with respect to each theta_j
-        gradient = (1 / m) * np.dot(X.T, error)
+        # 3. deel de som door het aantal rijen en vermenigvuldig de data met het verschil tussen de voorspelling en de werkelijke waarde
+        gradient = (1 / m) * np.dot(X.T, delta)
 
-        # Update theta using the gradient and learning rate alpha
-        theta -= alpha * gradient.T  # Transpose gradient back to a row vector
+        # 4. update theta doormiddel van de gradient en de alpha
+        theta -= alpha * gradient.T
 
-        # Calculate the cost and add it to the list of costs for visualization
-        cost = (1 / (2 * m)) * np.sum(error**2)
-        costs.append(cost)
+        # 5. bereken de kosten en voeg het toe aan de lijst
+        costs.append(compute_cost(X, y, theta.T))
 
     # aan het eind van deze loop retourneren we de nieuwe waarde van theta
     # (wat is de dimensionaliteit van theta op dit moment?).
+    # Theta is (1, 2)
+    # print(theta.shape)
 
     return theta, costs
 
@@ -101,17 +97,17 @@ def gradient_descent(X, y, theta, alpha, num_iters):
 def draw_costs(data): 
     # OPGAVE 3b
     # YOUR CODE HERE
-    # Add data to plot
+    # voeg data toe aan de plot
     plt.plot(data)
 
-    # Set the y limit between 4 and 7
+    # zet de limit van Y tussen 4 en 7
     plt.ylim(4, 7)
 
-    # Setting x and y labels
+    # zet er een x label en een y label bij
     plt.xlabel('iterations')
     plt.ylabel('J(theta)')
 
-    # showing the plot
+    # laat het plot zien
     plt.show()
 
 def contour_plot(X, y):
@@ -124,6 +120,7 @@ def contour_plot(X, y):
     # zetten. Deze ndarray kun je vervolgens meesturen aan de functie computeCost. Bedenk of je nog een
     # transformatie moet toepassen of niet. Let op: je moet computeCost zelf *niet* aanpassen.
 
+    # moest veranderd worden omdat het anders niet werkte
     ax = plt.figure(figsize=(7, 7)).add_subplot(projection='3d')
     plt.get_cmap('jet')
 
@@ -136,15 +133,16 @@ def contour_plot(X, y):
     #YOUR CODE HERE
     for i in range(len(t1)):
         for j in range(len(t2)):
+            # maak een array van de t1 en t2 waarden
             t = np.array([t1[i], t2[j]])
-            # divide by 100 for some reason
-            J_vals[i, j] = compute_cost(X, y, t) / 100
+            # vul de J_values doormiddel van het bereken van de kosten
+            J_vals[i, j] = compute_cost(X, y, t) / 100 # deel door 100 voor een of andere reden
 
     ax.plot_surface(T1, T2, J_vals, rstride=1, cstride=1, cmap=cm.coolwarm, linewidth=0, antialiased=False)
 
     ax.set_xlabel(r'$\theta_0$', linespacing=3.2)
 
-    # change the ticks of the x-axis
+    # verander de ticks van de x axis
     ax.set_xticks(np.arange(-10, 12.5, 2.5))
     ax.set_ylabel(r'$\theta_1$', linespacing=3.1)
     ax.set_zlabel(r'$J(\theta_0, \theta_1)$', linespacing=3.4)
