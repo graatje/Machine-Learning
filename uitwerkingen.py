@@ -101,7 +101,18 @@ def gradient_descent(X, y, theta, alpha, num_iters):
 def draw_costs(data): 
     # OPGAVE 3b
     # YOUR CODE HERE
-    pass
+    # Add data to plot
+    plt.plot(data)
+
+    # Set the y limit between 4 and 7
+    plt.ylim(4, 7)
+
+    # Setting x and y labels
+    plt.xlabel('iterations')
+    plt.ylabel('J(theta)')
+
+    # showing the plot
+    plt.show()
 
 def contour_plot(X, y):
     #OPGAVE 4
