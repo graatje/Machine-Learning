@@ -72,9 +72,25 @@ def gradient_descent(X, y, theta, alpha, num_iters):
     #   4. update de i-de parameter van theta, namelijk door deze te verminderen met
     #      alpha keer het gemiddelde van de som van de vermenigvuldiging uit 3
 
-    m,n = X.shape
+    m, n = X.shape
     costs = []
-    # YOUR CODE HERE
+
+    for _ in range(num_iters):
+        # Calculate the predicted values
+        prediction = np.dot(X, theta.reshape(-1, 1))  # Reshape theta as a column vector
+
+        # Calculate the error (difference between prediction and actual values)
+        error = prediction - y
+
+        # Calculate the gradient (derivative) of the cost function with respect to each theta_j
+        gradient = (1 / m) * np.dot(X.T, error)
+
+        # Update theta using the gradient and learning rate alpha
+        theta -= alpha * gradient.T  # Transpose gradient back to a row vector
+
+        # Calculate the cost and add it to the list of costs for visualization
+        cost = (1 / (2 * m)) * np.sum(error**2)
+        costs.append(cost)
 
     # aan het eind van deze loop retourneren we de nieuwe waarde van theta
     # (wat is de dimensionaliteit van theta op dit moment?).
