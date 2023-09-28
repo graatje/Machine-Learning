@@ -24,7 +24,7 @@ def sigmoid(z):
 
 
 # ==== OPGAVE 2b ====
-def get_y_matrix(y, m):
+def get_y_matrix(y: np.ndarray, m: int):
     # Gegeven een vector met waarden y_i van 1...x, retourneer een (ijle) matrix
     # van m×x met een 1 op positie y_i en een 0 op de overige posities.
     # Let op: de gegeven vector y is 1-based en de gevraagde matrix is 0-based,
@@ -42,7 +42,6 @@ def get_y_matrix(y, m):
     y_vec = csr_matrix((data, (rows, cols)), shape=(len(rows), width+1)).toarray()
     print(y_vec)
     return y_vec
-
 
 # ==== OPGAVE 2c ==== 
 # ===== deel 1: =====
