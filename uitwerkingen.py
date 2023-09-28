@@ -111,22 +111,37 @@ def sigmoid_gradient(z):
     gradient = g * (1 - g)
     return gradient
 
-    pass
 
 # ==== OPGAVE 3b ====
-def nn_check_gradients(Theta1, Theta2, X, y): 
+def nn_check_gradients(Theta1, Theta2, X, y):
     # Retourneer de gradiënten van Theta1 en Theta2, gegeven de waarden van X en van y
     # Zie het stappenplan in de opgaven voor een mogelijke uitwerking.
 
     Delta2 = np.zeros(Theta1.shape)
     Delta3 = np.zeros(Theta2.shape)
-    m = 1 #voorbeeldwaarde; dit moet je natuurlijk aanpassen naar de echte waarde van m
+    m = X.shape[0]
 
-    for i in range(m): 
-        #YOUR CODE HERE
-        pass
+    for i in range(m):
+        # Stap 1: Forward propagation
+        a1 = np.insert(X[i, :], 0, 1)
+        z2 = np.dot(Theta1, a1)
+        a2 = np.insert(sigmoid(z2), 0, 1)
+        z3 = np.dot(Theta2, a2)
+        a3 = sigmoid(z3)
 
-    Delta2_grad = Delta2 / m
-    Delta3_grad = Delta3 / m
-    
-    return Delta2_grad, Delta3_grad
+        # Stap 2: Bereken delta voor output-laag
+        delta3 = a3 - get_y_matrix(y, m)[i, :]
+
+        # Stap 3: Bereken delta voor verborgen laag
+        delta2 = np.dot(Theta2.T, delta3)[1:] * sigmoid_gradient(z2)
+
+        # Stap 4: Update Delta matrices
+        Delta2 += np.outer(delta2, a1)
+        Delta3 += np.outer(delta3, a2)
+
+    # Stap 5: Bereken gemiddelde gradiënten
+    delta2_grad = Delta2 / m
+    delta3_grad = Delta3 / m
+
+    return delta2_grad, delta3_grad
+
