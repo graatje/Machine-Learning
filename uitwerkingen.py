@@ -30,11 +30,19 @@ def get_y_matrix(y, m):
     # Let op: de gegeven vector y is 1-based en de gevraagde matrix is 0-based,
     # dus als y_i=1, dan moet regel i in de matrix [1,0,0, ... 0] zijn, als
     # y_i=10, dan is regel i in de matrix [0,0,...1] (in dit geval is de breedte
-    # van de matrix 10 (0-9), maar de methode moet werken voor elke waarde van 
-    # y en m
+    # van de matrix 10 (0-9), maar de methode moet werken voor elke waarde van y en m
 
-    #YOUR CODE HERE
-    pass
+    x = len(y)
+    y_i = y[:, 0]
+    cols = y_i - 1
+    rows = np.arange(m)
+    width = np.max(cols)
+    data = np.ones(x)
+
+    y_vec = csr_matrix((data, (rows, cols)), shape=(len(rows), width+1)).toarray()
+    print(y_vec)
+    return y_vec
+
 
 # ==== OPGAVE 2c ==== 
 # ===== deel 1: =====
