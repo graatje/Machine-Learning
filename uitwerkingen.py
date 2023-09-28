@@ -145,3 +145,8 @@ def nn_check_gradients(Theta1, Theta2, X, y):
 
     return delta2_grad, delta3_grad
 
+# Opgave 4
+# Bij 10 iteraties = 79.32%
+# Bij 50 iteraties = 97.2%
+# Bij 200 iteraties = divide bij zero error at 187. accuracy: 100%
+
