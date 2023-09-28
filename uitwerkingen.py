@@ -24,17 +24,28 @@ def sigmoid(z):
 
 
 # ==== OPGAVE 2b ====
-def get_y_matrix(y, m):
+def get_y_matrix(y: np.ndarray, m: int):
     # Gegeven een vector met waarden y_i van 1...x, retourneer een (ijle) matrix
     # van m×x met een 1 op positie y_i en een 0 op de overige posities.
     # Let op: de gegeven vector y is 1-based en de gevraagde matrix is 0-based,
     # dus als y_i=1, dan moet regel i in de matrix [1,0,0, ... 0] zijn, als
     # y_i=10, dan is regel i in de matrix [0,0,...1] (in dit geval is de breedte
-    # van de matrix 10 (0-9), maar de methode moet werken voor elke waarde van 
+    # van de matrix 10 (0-9), maar de methode moet werken voor elke waarde van
     # y en m
 
-    #YOUR CODE HERE
-    pass
+    # Maak de arrays voor de csr_matrix
+
+    cols = y.flatten() - 1  # Omzetten naar 0-based index
+    rows = np.arange(m)
+    data = np.ones_like(cols)
+
+    # Bepaal de breedte van de matrix op basis van de maximale waarde in y
+    matrix_width = np.max(cols) + 1
+
+    # Maak de csr_matrix
+    y_vec = csr_matrix((data, (rows, cols)), shape=(len(rows), matrix_width)).toarray()
+
+    return y_vec
 
 # ==== OPGAVE 2c ==== 
 # ===== deel 1: =====
