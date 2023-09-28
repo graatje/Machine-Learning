@@ -40,20 +40,19 @@ def get_y_matrix(y: np.ndarray, m: int):
     data = np.ones(x)
 
     y_vec = csr_matrix((data, (rows, cols)), shape=(len(rows), width+1)).toarray()
-    print(y_vec)
     return y_vec
 
 # ==== OPGAVE 2c ==== 
 # ===== deel 1: =====
 def predict_number(Theta1, Theta2, X):
     # Deze methode moet een matrix teruggeven met de output van het netwerk
-    # gegeven de waarden van Theta1 en Theta2. Elke regel in deze matrix 
+    # gegeven de waarden van Theta1 en Theta2. Elke regel in deze matrix
     # is de waarschijnlijkheid dat het sample op die positie (i) het getal
     # is dat met de kolom correspondeert.
 
     # De matrices Theta1 en Theta2 corresponderen met het gewicht tussen de
     # input-laag en de verborgen laag, en tussen de verborgen laag en de
-    # output-laag, respectievelijk. 
+    # output-laag, respectievelijk.
 
     # Een mogelijk stappenplan kan zijn:
 
@@ -68,23 +67,39 @@ def predict_number(Theta1, Theta2, X):
     # Voeg enen toe aan het begin van elke stap en reshape de uiteindelijke
     # vector zodat deze dezelfde dimensionaliteit heeft als y in de exercise.
 
-    pass
+    # Stap 1: Voeg enen toe aan de gegeven matrix X
+    a1 = np.insert(X, 0, 1, axis=1)
+
+    # Stap 2: Bereken de activatie van de tweede laag (verborgen laag)
+    z2 = np.dot(a1, Theta1.T)
+    a2 = sigmoid(z2)
+
+    # Stap 3: Voeg enen toe aan de matrix a2
+    a2 = np.insert(a2, 0, 1, axis=1)
+
+    # Stap 4: Bereken de activatie van de derde laag (output laag)
+    z3 = np.dot(a2, Theta2.T)
+    h = sigmoid(z3)
+
+    return h
 
 
 
 # ===== deel 2: =====
 def compute_cost(Theta1, Theta2, X, y):
-    # Deze methode maakt gebruik van de methode predictNumber() die je hierboven hebt
-    # geïmplementeerd. Hier wordt het voorspelde getal vergeleken met de werkelijk 
-    # waarde (die in de parameter y is meegegeven) en wordt de totale kost van deze
-    # voorspelling (dus met de huidige waarden van Theta1 en Theta2) berekend en
-    # geretourneerd.
-    # Let op: de y die hier binnenkomt is de m×1-vector met waarden van 1...10. 
-    # Maak gebruik van de methode get_y_matrix() die je in opgave 2a hebt gemaakt
-    # om deze om te zetten naar een matrix. 
+    m = X.shape[0]
 
-    pass
+    # Zet y om naar een matrix
+    y_matrix = get_y_matrix(y, m)
 
+    # Voorspel de getallen
+    h = predict_number(Theta1, Theta2, X)
+
+    # Bereken de kost volgens de gegeven formule
+    cost_matrix = -y_matrix * np.log(h) - (1 - y_matrix) * np.log(1 - h)
+    cost = np.sum(cost_matrix) / m
+
+    return cost
 
 
 # ==== OPGAVE 3a ====
