@@ -103,10 +103,13 @@ def compute_cost(Theta1, Theta2, X, y):
 
 
 # ==== OPGAVE 3a ====
-def sigmoid_gradient(z): 
+def sigmoid_gradient(z):
     # Retourneer hier de waarde van de afgeleide van de sigmoïdefunctie.
     # Zie de opgave voor de exacte formule. Zorg ervoor dat deze werkt met
     # scalaire waarden en met vectoren.
+    g = 1 / (1 + np.exp(-z))
+    gradient = g * (1 - g)
+    return gradient
 
     pass
 
