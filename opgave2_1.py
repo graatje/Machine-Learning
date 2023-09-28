@@ -10,6 +10,8 @@ X = iris.data
 # Vul uitkomstvector y op basis van target
 y = (iris.target == 2).astype(int)  # 1 voor 'virginica', 0 voor de rest
 
+m = len(y)
+
 
 # Definieer de sigmoid-functie
 def sigmoid(z):
@@ -28,17 +30,18 @@ for _ in range(1500):
     predictions = sigmoid(np.dot(X, theta))
 
     # Bereken de errors
-    errors = predictions - y
+    errors = np.subtract(predictions, y)
 
     # Bereken de gradient
-    gradient = np.dot(X.T, errors) / len(y)
+    gradient = np.dot(X.T, errors) / m
 
     # Pas theta aan
-    theta -= alpha * gradient
+    theta -= np.multiply(alpha, gradient)
 
     # Bereken de kosten (Log Loss)
-    cost = -1/len(y) * (np.dot(y, np.log(predictions)) + np.dot(1 - y, np.log(1 - predictions)))
+    cost = -1/m * (np.dot(y, np.log(predictions)) + np.dot(1 - y, np.log(1 - predictions)))
     print(cost)
+
 
 
 # Laatste waarde van theta en kosten
