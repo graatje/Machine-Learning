@@ -143,7 +143,7 @@ def nn_check_gradients(Theta1, Theta2, X, y):
     delta2_grad = Delta2 / m
     delta3_grad = Delta3 / m
 
-    return delta2_grad, delta3_grad
+    return np.concatenate(delta2_grad), np.concatenate(delta3_grad)
 
 # Opgave 4
 # Bij 10 iteraties = 79.32%
