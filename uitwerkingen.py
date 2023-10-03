@@ -143,6 +143,7 @@ def nn_check_gradients(Theta1, Theta2, X, y):
     delta2_grad = Delta2 / m
     delta3_grad = Delta3 / m
 
+    # Stap 6: Rol de matrices uit tot vectoren
     return np.concatenate(delta2_grad), np.concatenate(delta3_grad)
 
 # Opgave 4
