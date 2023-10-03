@@ -129,13 +129,13 @@ def nn_check_gradients(Theta1, Theta2, X, y):
         z3 = np.dot(Theta2, a2)
         a3 = sigmoid(z3)
 
-        # Stap 2: Bereken delta voor output-laag
+        # Stap 2: Zet voor elke output-node k in de derde laag
         delta3 = a3 - get_y_matrix(y, m)[i, :]
 
-        # Stap 3: Bereken delta voor verborgen laag
+        # Stap 3: Bijdrage aan de totale fout van de verborgen laag bepalen
         delta2 = np.dot(Theta2.T, delta3)[1:] * sigmoid_gradient(z2)
 
-        # Stap 4: Update Delta matrices
+        # Stap 4: Deze bijdrage tellen we op bij de andere bijdragen, op deze manier creëren we 2 nieuwe matrices
         Delta2 += np.outer(delta2, a1)
         Delta3 += np.outer(delta3, a2)
 
