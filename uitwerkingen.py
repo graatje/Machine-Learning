@@ -140,8 +140,8 @@ def nn_check_gradients(Theta1, Theta2, X, y):
         Delta3 += np.outer(delta3, a2)
 
     # Stap 5: Bereken gemiddelde gradiënten
-    delta2_grad = Delta2 / m
-    delta3_grad = Delta3 / m
+    delta2_grad = np.divide(Delta2, m)
+    delta3_grad = np.divide(Delta3, m)
 
     # Stap 6: Rol de matrices uit tot vectoren
     return np.concatenate(delta2_grad), np.concatenate(delta3_grad)
