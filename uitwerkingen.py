@@ -130,7 +130,7 @@ def nn_check_gradients(Theta1, Theta2, X, y):
         a3 = sigmoid(z3)
 
         # Stap 2: Zet voor elke output-node k in de derde laag
-        delta3 = a3 - get_y_matrix(y, m)[i, :]
+        delta3 = np.subtract(a3, get_y_matrix(y, m)[i, :])
 
         # Stap 3: Bijdrage aan de totale fout van de verborgen laag bepalen
         delta2 = np.dot(Theta2.T, delta3)[1:] * sigmoid_gradient(z2)
