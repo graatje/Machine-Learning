@@ -84,7 +84,9 @@ def conf_els(conf, labels):
     fn = np.sum(conf, axis=1) - tp
     tn = np.sum(conf) - tp - fp - fn
 
-    return list(zip(labels, tp, fp, fn, tn))
+    return {labels[i]: value for i, value in enumerate(list(zip(tp, fp, fn, tn)))}
+
+
 # OPGAVE 2c
 def conf_data(metrics):
     # Deze methode krijgt de lijst mee die je in de vorige opgave hebt gemaakt (dus met lengte len(labels))
@@ -93,14 +95,26 @@ def conf_data(metrics):
     # vorm van een dictionary (de scaffold hiervan is gegeven).
 
     # VERVANG ONDERSTAANDE REGELS MET JE EIGEN CODE
-    
-    tp = 1
-    fp = 1
-    fn = 1
-    tn = 1
+
+    tps = 0
+    fps = 0
+    fns = 0
+    tns = 0
+
+    for tp, fp, fn, tn in metrics.values():
+        tps += tp
+        fps += fp
+        fns += fn
+        tns += tn
 
     # BEREKEN HIERONDER DE JUISTE METRIEKEN EN RETOURNEER DIE 
     # ALS EEN DICTIONARY
 
-    rv = {'tpr':0, 'ppv':0, 'tnr':0, 'fpr':0 }
+    rv = {
+        'tpr': tps / (tps + fns),
+        'ppv': tps / (tps + fps),
+        'tnr': tns / (tns + fps),
+        'fpr': fps / (fps + tns)
+    }
+
     return rv
