@@ -49,8 +49,8 @@ def build_model():
 
     # Compile the model
     model.compile(optimizer='adam',
-                    loss='sparse_categorical_crossentropy',
-                    metrics=['accuracy'])
+                  loss='sparse_categorical_crossentropy',
+                  metrics=['accuracy'])
 
     return model
 
@@ -79,8 +79,12 @@ def conf_els(conf, labels):
     # https://numpy.org/doc/stable/reference/generated/numpy.diagonal.html
  
     # YOUR CODE HERE
-    pass
+    tp = np.diagonal(conf)
+    fp = np.sum(conf, axis=0) - tp
+    fn = np.sum(conf, axis=1) - tp
+    tn = np.sum(conf) - tp - fp - fn
 
+    return list(zip(labels, tp, fp, fn, tn))
 # OPGAVE 2c
 def conf_data(metrics):
     # Deze methode krijgt de lijst mee die je in de vorige opgave hebt gemaakt (dus met lengte len(labels))
