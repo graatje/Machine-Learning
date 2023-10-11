@@ -24,7 +24,7 @@ def scale_data(X):
 
     # YOUR CODE HERE
 
-    pass
+    return np.divide(X, np.max(X))
 
 # OPGAVE 1c
 def build_model():
