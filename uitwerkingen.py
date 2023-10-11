@@ -62,7 +62,7 @@ def conf_matrix(labels, pred):
     # https://www.tensorflow.org/api_docs/python/tf/math/confusion_matrix
     
     # YOUR CODE HERE
-    pass
+    return tf.math.confusion_matrix(labels, pred)
     
 
 # OPGAVE 2b
